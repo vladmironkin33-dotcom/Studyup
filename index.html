@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f5f7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="StudyUp">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>StudyUp</title>
+<style>
+:root{color-scheme:light;--bg:#f5f5f7;--card:#fff;--text:#171719;--muted:#777780;--line:#e5e5ea;--blue:#087cff;--soft:#e9f2ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:82px}
+body.dark{color-scheme:dark;--bg:#101014;--card:#1c1c22;--text:#f5f5f7;--muted:#a1a1aa;--line:#34343b;--blue:#3995ff;--soft:#1d3048}
+header{position:sticky;top:0;background:var(--bg);padding:16px 18px 12px;display:flex;justify-content:space-between;align-items:center;z-index:3;border-bottom:1px solid var(--line)}
+.brand{font-size:23px;font-weight:850;letter-spacing:-.8px}.brand span{color:var(--blue)}.tag{font-size:11px;color:var(--muted);margin-top:2px}
+main{max-width:650px;margin:auto;padding:16px}.view{display:none}.view.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
+.hero{background:var(--soft);border:0}.eyebrow{font-size:11px;color:var(--blue);font-weight:750;letter-spacing:.6px}
+h1{font-size:25px;margin:8px 0}h2{font-size:21px;margin:4px 0 14px}p{line-height:1.45}.muted{color:var(--muted);font-size:13px}
+.metrics{display:flex;gap:24px;margin-top:17px}.metric b{display:block;font-size:23px}.metric span{font-size:11px;color:var(--muted)}
+.subject,.answer,.rowbtn{width:100%;display:flex;align-items:center;text-align:left;background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:15px;padding:13px;margin:8px 0;gap:12px;font-size:15px}
+.subject .emoji{width:42px;height:42px;display:grid;place-items:center;background:var(--soft);border-radius:13px;font-size:21px}
+.subject .desc{display:block;color:var(--muted);font-size:12px;margin-top:3px}.push{margin-left:auto;color:var(--muted)}
+button{cursor:pointer;font:inherit}.primary,.secondary,.tiny{border:0;border-radius:13px;padding:12px 15px;font-weight:700}.primary{background:var(--blue);color:#fff;width:100%;margin-top:10px}.secondary{background:var(--soft);color:var(--blue)}.tiny{background:var(--card);border:1px solid var(--line);color:var(--text);padding:9px 12px}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:var(--card);border-top:1px solid var(--line);padding:8px 5px calc(8px + env(safe-area-inset-bottom));z-index:4}
+nav button{border:0;background:none;color:var(--muted);font-size:11px;min-width:58px;padding:5px}nav button.active{color:var(--blue);font-weight:750}nav .ico{font-size:19px;display:block;margin-bottom:2px}
+.pill{display:inline-block;background:var(--soft);color:var(--blue);padding:5px 9px;border-radius:20px;font-size:11px;font-weight:700}
+.progress{height:8px;background:var(--line);border-radius:10px;overflow:hidden;margin:12px 0 20px}.progress div{height:100%;background:var(--blue)}
+.answer{display:block}.answer.selected{border:2px solid var(--blue);background:var(--soft)}.answer.good{border-color:#22a06b;background:#e8f7ef;color:#126b42}.answer.bad{border-color:#d94b4b;background:#fff0f0;color:#a32626}
+input,textarea,select{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--text);margin:6px 0 12px;font:inherit}
+.smallrow{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13px}
+dialog{border:1px solid var(--line);border-radius:18px;background:var(--card);color:var(--text);width:calc(100% - 32px);max-width:450px;padding:20px}dialog::backdrop{background:#0008}
+</style>
+</head>
+<body>
+<header><div><div class="brand">Study<span>Up</span></div><div class="tag">Учись. Проверяй. Расти.</div></div><button class="tiny" id="theme">◐ Тема</button></header>
+<main>
+<section class="view active" id="home">
+<div class="card hero"><div class="eyebrow">ТВОЙ УЧЕБНЫЙ ПРОГРЕСС</div><h1 id="hello">Продолжай учиться!</h1><div class="muted">Все результаты сохраняются на этом iPhone.</div><div class="metrics"><div class="metric"><b id="mTests">0</b><span>тестов</span></div><div class="metric"><b id="mAccuracy">0%</b><span>точность</span></div><div class="metric"><b id="mLevel">1</b><span>уровень</span></div></div></div>
+<h2>Предметы</h2>
+<div id="homeSubjects"></div>
+<div class="card"><b>Работа над ошибками</b><p class="muted">Повтори вопросы, в которых ошибся.</p><button class="secondary" onclick="show('errors')">Открыть ошибки →</button></div>
+</section>
+<section class="view" id="tests"><h2>Тестирование</h2><div class="card"><b>Сложность</b><select id="difficulty"><option>Лёгкий</option><option>Средний</option><option>Сложный</option></select><div class="muted">На сложных уровнях добавляются дополнительные вопросы.</div></div><div id="testSubjects"></div></section>
+<section class="view" id="quiz"><button class="tiny" onclick="show('tests')">← Назад</button><div class="smallrow"><span id="qSubject"></span><span id="qCount"></span></div><div class="progress"><div id="qBar" style="width:20%"></div></div><span class="pill" id="qLevel"></span><h2 id="qText" style="margin-top:16px"></h2><div id="qAnswers"></div><div class="card" id="explain" hidden></div><button class="primary" id="check" disabled>Проверить ответ</button><button class="primary" id="next" hidden>Следующий вопрос</button></section>
+<section class="view" id="stats"><h2>Статистика</h2><div class="card"><div class="smallrow"><span>Пройдено тестов</span><b id="sTests">0</b></div><div class="smallrow"><span>Средний результат</span><b id="sAvg">0%</b></div><div class="smallrow"><span>Правильных ответов</span><b id="sCorrect">0</b></div><div class="smallrow"><span>Опыт</span><b id="sXp">0 XP</b></div></div><div class="card"><b>История</b><div id="history" class="muted">Тестов пока нет.</div></div></section>
+<section class="view" id="profile"><h2>Профиль</h2><div class="card"><label class="muted">Твоё имя</label><input id="name" placeholder="Например, Владислав"><button class="primary" id="saveName">Сохранить имя</button></div><div class="card"><b>Данные на устройстве</b><p class="muted">Никакой аккаунт и облако не используются. Сохраняй резервную копию, чтобы перенести прогресс.</p><button class="secondary" id="export">Экспортировать резервную копию</button><label class="secondary" style="display:block;text-align:center;margin-top:10px">Импортировать копию<input type="file" id="import" accept="application/json" hidden></label></div><div class="card"><b>Управление данными</b><p class="muted">Сброс удалит историю, опыт и ошибки.</p><button class="tiny" id="reset">Сбросить прогресс</button></div><p class="muted">StudyUp 3.0 · автономная версия</p></section>
+<section class="view" id="errors"><h2>Работа над ошибками</h2><div id="errorItems" class="muted">Ошибок пока нет.</div></section>
+<section class="view" id="editor"><button class="tiny" onclick="show('profile')">← Профиль</button><h2>Добавить вопрос</h2><div class="card"><label class="muted">Предмет</label><input id="newSubject" placeholder="Например, Химия"><label class="muted">Вопрос</label><textarea id="newQuestion" rows="3" placeholder="Текст вопроса"></textarea><label class="muted">Варианты ответов (каждый с новой строки)</label><textarea id="newOptions" rows="4" placeholder="Вариант 1&#10;Вариант 2&#10;Вариант 3"></textarea><label class="muted">Номер правильного ответа (начиная с 1)</label><input id="newCorrect" type="number" min="1" value="1"><label class="muted">Объяснение</label><textarea id="newExplanation" rows="2"></textarea><button class="primary" id="addQuestion">Сохранить вопрос</button></div></section>
+</main>
+<nav><button class="active" data-page="home"><span class="ico">⌂</span>Главная</button><button data-page="tests"><span class="ico">▤</span>Тесты</button><button data-page="stats"><span class="ico">▥</span>Статистика</button><button data-page="profile"><span class="ico">○</span>Профиль</button></nav>
+<dialog id="resultDialog"><h2>Тест завершён!</h2><div id="resultText"></div><button class="primary" onclick="document.getElementById('resultDialog').close();show('home')">На главную</button></dialog>
+<script src="app.js"></script>
+</body></html>
